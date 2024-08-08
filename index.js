@@ -8,19 +8,21 @@ const corsOptions = {
     origin: "http://localhost:5173"
 };
 app.use(cors(corsOptions));
+app.use(express.json());
 
+const verifyToken = require("./src/middleware");
 const routes = require("./src/routes"); 
-app.use("/api", routes); 
+app.use("/api", verifyToken, routes); 
 
 app.get("/", (req, res) => {
     res.send("ReiMusic API");
 })
 
-const { connectClient } = require("./src/config");
+const { connectMongoose } = require("./src/config");
 const startServer = () => {
     app.listen(port, () => {
         console.log(`Listening on port: ${port}`)
     })
 }
 
-connectClient(() => startServer());
+connectMongoose(() => startServer());
