@@ -11,8 +11,20 @@ const createUserInDb = async (uid, username) => {
         await newUser.save();
     }
     catch (error) {
+        console.error(error);
         throw new Error("Error creating new user");
     }
 }
 
-module.exports = { createUserInDb }
+const getUserFromDb = async (uid) => {
+    try {
+        const user = await User.findById(uid).exec(); 
+        return user;
+    }
+    catch (error) {
+        console.error(error); 
+        throw new Error("Error retrieving user document"); 
+    }
+}
+
+module.exports = { createUserInDb, getUserFromDb }

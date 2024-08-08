@@ -1,3 +1,3 @@
-const { createUserInDb } = require("./mongoService");
+const { createUserInDb, getUserFromDb } = require("./mongoService");
 
-module.exports = { createUserInDb }
+module.exports = { createUserInDb, getUserFromDb }
