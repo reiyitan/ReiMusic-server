@@ -11,11 +11,6 @@ const userSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
-    firebaseID: {
-        type: String,
-        required: true,
-        unique: true
-    },
     playlists: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Playlist"
