@@ -47,8 +47,23 @@ const removeFromPlaylist = async (req, res) => {
 /**
  * path params: userId, playlistId
  */
-const getPlaylists = async (req, res) => {
+const getPlaylist = async (req, res) => {
 
 }
 
-module.exports = { createPlaylist, deletePlaylist, renamePlaylist, addToPlaylist, removeFromPlaylist, getPlaylists }
+/**
+ * path params: playlistId
+ */
+const getPlaylists = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const playlists = await getPlaylistsFromDb(userId); 
+        res.status(200).json({playlists});
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({error: "Error fetching playlists"});
+    }
+}
+
+module.exports = { createPlaylist, deletePlaylist, renamePlaylist, addToPlaylist, removeFromPlaylist, getPlaylist, getPlaylists }

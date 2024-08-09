@@ -40,7 +40,8 @@ const removeFromPlaylistInDb = async (playlistId, songId) => {
 }
 
 const getPlaylistsFromDb = async (uid) => {
-
+    const user = await getUserFromDb(uid); 
+    return user.playlists; 
 }
 
 module.exports = { createPlaylistInDb, deletePlaylistInDb, renamePlaylistInDb, addToPlaylistInDb, removeFromPlaylistInDb, getPlaylistsFromDb }
