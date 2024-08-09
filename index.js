@@ -10,7 +10,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const verifyToken = require("./src/middleware");
+const { verifyToken } = require("./src/middleware");
 const routes = require("./src/routes"); 
 app.use("/api", verifyToken, routes); 
 

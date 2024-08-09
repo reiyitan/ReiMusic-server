@@ -1,3 +1,3 @@
-const verifyToken = require("./auth");
+const authMiddleware = require("./auth");
 
-module.exports = verifyToken;
+module.exports = { ...authMiddleware };

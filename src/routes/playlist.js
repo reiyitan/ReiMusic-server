@@ -1,12 +1,14 @@
 const express = require("express"); 
 const router = express.Router(); 
-const { createPlaylist, deletePlaylist, renamePlaylist, addToPlaylist, removeFromPlaylist, getPlaylists } = require("../controllers");
+const { checkOwner } = require("../middleware");
+const { createPlaylist, deletePlaylist, renamePlaylist, addToPlaylist, removeFromPlaylist, getPlaylist, getPlaylists } = require("../controllers");
 
 router.post("/", createPlaylist); 
-router.delete("/:userId/:playlistId", deletePlaylist); 
-router.patch("/rename/:userId/:playlistId", renamePlaylist);
-router.patch("/add/:userId/:playlistId", addToPlaylist);
-router.patch("/remove/:userId/:playlistId", removeFromPlaylist);
-router.get("/:userId/:playlistId", getPlaylists);
+router.delete("/:userId/:playlistId", checkOwner, deletePlaylist); 
+router.patch("/rename/:userId/:playlistId", checkOwner, renamePlaylist);
+router.patch("/add/:userId/:playlistId", checkOwner, addToPlaylist);
+router.patch("/remove/:userId/:playlistId", checkOwner, removeFromPlaylist);
+router.get("/:userId/:playlistId", checkOwner, getPlaylist);
+router.get("/:userId", checkOwner, getPlaylists);
 
 module.exports = router; 

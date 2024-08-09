@@ -17,4 +17,13 @@ const verifyToken = (req, res, next) => {
         });
 }
 
-module.exports = verifyToken;
+const checkOwner = (req, res, next) => {
+    const { userId } = req.params; 
+    const requesterId = req.uid; 
+    if (requesterId !== userId) {
+        return res.status(401).json({error: "Unauthorized"}); 
+    }
+    next();
+}
+
+module.exports = { verifyToken, checkOwner };
