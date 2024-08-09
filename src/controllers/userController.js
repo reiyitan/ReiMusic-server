@@ -14,7 +14,7 @@ const createUser = (req, res) => {
 }
 
 const getUser = async (req, res) => {
-    const uid = req.query.uid;
+    const { uid } = req.params;
     if (!uid) {
         return res.status(400).json({message: "No uid provided"});
     }
