@@ -1,3 +1,5 @@
-const { createUserInDb, getUserFromDb } = require("./mongoService");
+const mongoUserService = require("./mongoUserService");
+const mongoPlaylistService = require("./mongoPlaylistService");
+const mongoSongService = require("./mongoSongService");
 
-module.exports = { createUserInDb, getUserFromDb }
+module.exports = { ...mongoUserService, ...mongoPlaylistService, ...mongoSongService }

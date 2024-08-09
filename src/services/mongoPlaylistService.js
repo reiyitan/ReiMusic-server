@@ -10,7 +10,10 @@ const createPlaylistInDb = async (uid) => {
     });
     try {
         const savedPlaylist = await newPlaylist.save(); 
-        user.playlists.unshift(savedPlaylist._id);
+        user.playlists.unshift({
+            name: savedPlaylist.name,
+            _id: savedPlaylist._id
+        });
         await user.save();
         return savedPlaylist
     }

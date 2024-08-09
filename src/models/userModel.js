@@ -11,8 +11,11 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     playlists: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Playlist"
+        name: String,
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Playlist"
+        }
     }],
     uploadedSongs: [{
         type: mongoose.Schema.Types.ObjectId,

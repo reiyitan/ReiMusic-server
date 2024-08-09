@@ -1,4 +1,4 @@
-const { User, Song, Playlist } = require("../models");
+const { User } = require("../models");
 
 const createUserInDb = async (uid, username) => {
     const newUser = new User({
