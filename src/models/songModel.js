@@ -13,9 +13,13 @@ const songSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    uploadedBy: {
+    uploaderId: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User", 
+        required: true
+    },
+    uploader: {
+        type: String,
         required: true
     },
     s3_key: {
