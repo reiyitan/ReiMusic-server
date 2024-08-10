@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { User } = require("../models");
 
 const createUserInDb = async (uid, username) => {
@@ -27,4 +28,17 @@ const getUserFromDb = async (uid) => {
     }
 }
 
-module.exports = { createUserInDb, getUserFromDb }
+const deleteUserPlaylist = (uid, playlistId) => {
+    try {
+        User.updateOne(
+            {_id: uid},
+            {$pull: {playlists: {_id: mongoose.Types.ObjectId.createFromHexString(playlistId)}}}
+        ).exec()
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error("Error deleting user playlist");
+    }
+}
+
+module.exports = { createUserInDb, getUserFromDb, deleteUserPlaylist }

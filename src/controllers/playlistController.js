@@ -17,7 +17,14 @@ const createPlaylist = async (req, res) => {
  * path params: userId, playlistId
  */
 const deletePlaylist = async (req, res) => {
-
+    const { userId, playlistId } = req.params;
+    try {
+        deletePlaylistInDb(userId, playlistId);
+        return res.status(204);
+    }
+    catch (error) {
+        return res.status(500).json({error: "Error deleting playlist"});
+    }
 }
 
 /**

@@ -1,5 +1,6 @@
+const mongoose = require("mongoose");
 const { Playlist } = require("../models");
-const { getUserFromDb } = require("./mongoUserService");
+const { getUserFromDb, deleteUserPlaylist } = require("./mongoUserService");
 
 const createPlaylistInDb = async (uid) => {
     const user = await getUserFromDb(uid); 
@@ -24,7 +25,14 @@ const createPlaylistInDb = async (uid) => {
 }
 
 const deletePlaylistInDb = async (uid, playlistId) => {
-
+    try {
+        Playlist.deleteOne({_id: playlistId}).exec();
+        deleteUserPlaylist(uid, playlistId);
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error("Error deleting playlist");
+    }
 }
 
 const renamePlaylistInDb = async (playlistId) => {
