@@ -12,8 +12,7 @@ const createUserInDb = async (uid, username) => {
         await newUser.save();
     }
     catch (error) {
-        console.error(error);
-        throw new Error("Error creating new user");
+        throw error;
     }
 }
 
@@ -23,8 +22,7 @@ const getUserFromDb = async (uid) => {
         return user;
     }
     catch (error) {
-        console.error(error); 
-        throw new Error("Error retrieving user document"); 
+        throw error;
     }
 }
 
@@ -36,9 +34,17 @@ const deleteUserPlaylist = (uid, playlistId) => {
         ).exec()
     }
     catch (error) {
-        console.error(error);
-        throw new Error("Error deleting user playlist");
+        throw error;
     }
 }
 
-module.exports = { createUserInDb, getUserFromDb, deleteUserPlaylist }
+const renameUserPlaylist = async (uid, playlistId, newName) => {
+    const user = await User.findById(uid).exec(); 
+    const newPlaylists = user.playlists.map(playlist => (
+        playlist._id.equals(mongoose.Types.ObjectId.createFromHexString(playlistId)) ? { ...playlist, name: newName } : playlist
+    ));
+    user.playlists = newPlaylists;
+    await user.save(); 
+}
+
+module.exports = { createUserInDb, getUserFromDb, deleteUserPlaylist, renameUserPlaylist }

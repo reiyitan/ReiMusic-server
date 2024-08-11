@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 const { Playlist } = require("../models");
-const { getUserFromDb, deleteUserPlaylist } = require("./mongoUserService");
+const { getUserFromDb, deleteUserPlaylist, renameUserPlaylist } = require("./mongoUserService");
 
 const createPlaylistInDb = async (uid) => {
-    const user = await getUserFromDb(uid); 
-    const newPlaylist = new Playlist({
-        name: "New Playlist",
-        owner: user._id,
-        songs: []
-    });
     try {
+        const user = await getUserFromDb(uid); 
+        const newPlaylist = new Playlist({
+            name: "New Playlist",
+            owner: user._id,
+            songs: []
+        });
         const savedPlaylist = await newPlaylist.save(); 
         user.playlists.unshift({
             name: savedPlaylist.name,
@@ -19,8 +19,7 @@ const createPlaylistInDb = async (uid) => {
         return savedPlaylist
     }
     catch (error) {
-        console.error(error); 
-        throw new Error("Error creating new playlist"); 
+        throw error;
     }
 }
 
@@ -30,13 +29,20 @@ const deletePlaylistInDb = async (uid, playlistId) => {
         deleteUserPlaylist(uid, playlistId);
     }
     catch (error) {
-        console.error(error);
-        throw new Error("Error deleting playlist");
+        throw error
     }
 }
 
-const renamePlaylistInDb = async (playlistId) => {
-
+const renamePlaylistInDb = async (uid, playlistId, newName) => {
+    try {
+        const playlist = await Playlist.findById(mongoose.Types.ObjectId.createFromHexString(playlistId)).exec(); 
+        playlist.name = newName; 
+        await playlist.save(); 
+        renameUserPlaylist(uid, playlistId, newName);
+    }
+    catch (error) {
+        throw error;
+    }
 }
 
 const addToPlaylistInDb = async (playlistId, songId) => {

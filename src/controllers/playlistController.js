@@ -9,6 +9,7 @@ const createPlaylist = async (req, res) => {
         return res.status(201).json({playlist: newPlaylist});
     }
     catch (error) { 
+        console.error(error);
         return res.status(500).json({error: "Error creating new playlist"});
     }
 }
@@ -23,6 +24,7 @@ const deletePlaylist = async (req, res) => {
         return res.status(204).end();
     }
     catch (error) {
+        console.error(error);
         return res.status(500).json({error: "Error deleting playlist"});
     }
 }
@@ -32,7 +34,16 @@ const deletePlaylist = async (req, res) => {
  * body: newName
  */
 const renamePlaylist = async (req, res) => {
-
+    const { userId, playlistId } = req.params;
+    const { newName } = req.body;
+    try {
+        renamePlaylistInDb(userId, playlistId, newName);
+        return res.status(204).end();
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({error: "Error renaming playlist"});
+    }
 }
 
 /**
