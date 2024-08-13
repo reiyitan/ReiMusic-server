@@ -47,4 +47,14 @@ const renameUserPlaylist = async (uid, playlistId, newName) => {
     await user.save(); 
 }
 
-module.exports = { createUserInDb, getUserFromDb, deleteUserPlaylist, renameUserPlaylist }
+const addSongToUser = async (uid, songId) => {
+    const user = await User.findById(uid).exec(); 
+    user.uploadedSongs.push(songId);
+    await user.save();
+}
+
+const removeSongFromUser = async () => {
+
+}
+
+module.exports = { createUserInDb, getUserFromDb, deleteUserPlaylist, renameUserPlaylist, addSongToUser, removeSongFromUser }

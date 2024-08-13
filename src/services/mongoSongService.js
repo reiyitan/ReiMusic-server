@@ -7,7 +7,21 @@ const createUniqueId = (title, artist) => {
 }
 
 const createSongInDb = async (title, artist, duration, uid, username, s3_key) => {
-
+    try {
+        const newSong = Song({
+            title: title, 
+            artist: artist,
+            duration: duration,
+            uploaderId: uid,
+            uploader: username,
+            s3_key: s3_key
+        });
+        const savedSong = await newSong.save(); 
+        return savedSong;
+    }
+    catch (error) {
+        throw error;
+    }
 }
 
 
