@@ -1,4 +1,5 @@
-const { connectMongoose } = require("./db");
+const db = require("./db");
 const admin = require("./auth");
+const aws = require("./aws"); 
 
-module.exports = { connectMongoose, admin }
+module.exports = { ...db, ...admin, ...aws }
