@@ -1,4 +1,13 @@
-const { createPlaylistInDb, deletePlaylistInDb, renamePlaylistInDb, addToPlaylistInDb, removeFromPlaylistInDb, getPlaylistsFromDb } = require("../services");
+const { 
+    createPlaylistInDb, 
+    deletePlaylistInDb, 
+    renamePlaylistInDb,
+    addToPlaylistInDb, 
+    removeFromPlaylistInDb, 
+    getPlaylistsFromDb,
+    getPlaylistFromDb,
+    getSongFromDb
+} = require("../services");
 
 /**
  * uid in req.uid
@@ -66,7 +75,21 @@ const removeFromPlaylist = async (req, res) => {
  * path params: userId, playlistId
  */
 const getPlaylist = async (req, res) => {
-
+    const { playlistId } = req.params;
+    try {
+        const playlist = await getPlaylistFromDb(playlistId); 
+        const songs = await Promise.all(
+            playlist.songs.map(async song => {
+                return await getSongFromDb(song);
+            })
+        );
+        const newObject = {...playlist.toObject(), songs: songs}
+        return res.status(200).json({playlist: newObject});
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({error: "Error fetching playlist"});
+    }
 }
 
 /**

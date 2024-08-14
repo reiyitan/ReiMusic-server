@@ -24,6 +24,16 @@ const createSongInDb = async (title, artist, duration, uid, username, s3_key) =>
     }
 }
 
+const getSongFromDb = async (songId) => {
+    try {
+        const song = await Song.findById(songId).exec(); 
+        return song;
+    }
+    catch (error) {
+        throw error;
+    }
+}
 
 
-module.exports = { createUniqueId, createSongInDb }
+
+module.exports = { createUniqueId, createSongInDb, getSongFromDb }

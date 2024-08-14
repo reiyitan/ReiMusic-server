@@ -18,8 +18,8 @@ const verifyToken = (req, res, next) => {
 }
 
 const checkOwner = (req, res, next) => {
-    const { userId } = req.params; 
-    const requesterId = req.uid; 
+    const { userId } = req.params; //owner of the playlist
+    const requesterId = req.uid;   //requester
     if (requesterId !== userId) {
         return res.status(401).json({error: "Unauthorized"}); 
     }

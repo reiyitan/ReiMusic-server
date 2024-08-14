@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { Playlist } = require("../models");
 const { getUserFromDb, deleteUserPlaylist, renameUserPlaylist } = require("./mongoUserService");
+const { getSongFromDb } = require("./mongoSongService");
 
 const createPlaylistInDb = async (uid) => {
     try {
@@ -58,4 +59,14 @@ const getPlaylistsFromDb = async (uid) => {
     return user.playlists; 
 }
 
-module.exports = { createPlaylistInDb, deletePlaylistInDb, renamePlaylistInDb, addToPlaylistInDb, removeFromPlaylistInDb, getPlaylistsFromDb }
+const getPlaylistFromDb = async (playlistId) => {
+    try {
+        const playlist = await Playlist.findById(mongoose.Types.ObjectId.createFromHexString(playlistId)).exec();
+        return playlist;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
+module.exports = { createPlaylistInDb, deletePlaylistInDb, renamePlaylistInDb, addToPlaylistInDb, removeFromPlaylistInDb, getPlaylistsFromDb, getPlaylistFromDb }
