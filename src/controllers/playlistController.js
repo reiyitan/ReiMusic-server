@@ -81,8 +81,8 @@ const getPlaylist = async (req, res) => {
         const songs = await Promise.all(
             playlist.songs.map(async song => {
                 const songData = await getSongFromDb(song);
-                songData.parentPlaylistId = playlistId;
-                return songData;
+                const songDataObject = songData.toObject();
+                return { ...songDataObject, parentPlaylistId: playlistId };
             })
         );
         const newObject = {...playlist.toObject(), songs: songs}
