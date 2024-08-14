@@ -80,7 +80,9 @@ const getPlaylist = async (req, res) => {
         const playlist = await getPlaylistFromDb(playlistId); 
         const songs = await Promise.all(
             playlist.songs.map(async song => {
-                return await getSongFromDb(song);
+                const songData = await getSongFromDb(song);
+                songData.parentPlaylistId = playlistId;
+                return songData;
             })
         );
         const newObject = {...playlist.toObject(), songs: songs}
