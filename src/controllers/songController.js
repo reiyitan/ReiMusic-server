@@ -1,4 +1,16 @@
-const { uploadFileToS3, createUniqueId, createSongInDb, addSongToUser, getLinkFromS3 } = require("../services");
+const { getSongsFromDb, uploadFileToS3, createUniqueId, createSongInDb, addSongToUser, getLinkFromS3 } = require("../services");
+
+const getSongs = async (req, res) => {
+    try {
+        const { q } = req.query; 
+        const songs = await getSongsFromDb(q);
+        return res.status(200).json({songs: songs});
+    }
+    catch (error) {
+        console.error(error); 
+        return res.status(500).json({error: "Error retrieving songs"});
+    }
+}
 
 /**
  * body: title, artist, duration (seconds)
@@ -37,4 +49,4 @@ const getSongLink = async (req, res) => {
     }
 }
 
-module.exports = { uploadSong, getSongLink }
+module.exports = { getSongs, uploadSong, getSongLink }

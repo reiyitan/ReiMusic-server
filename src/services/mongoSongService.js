@@ -1,6 +1,23 @@
 const { Song } = require("../models"); 
 const mongoose = require("mongoose");
 
+const getSongsFromDb = async (q) => {
+    try {
+        const regex = new RegExp(q, "i");
+        const songs = await Song.find({
+            $or: [
+                {title: {$regex: regex}},
+                {artist: {$regex: regex}},
+                {uploader: {$regex: regex}}
+            ]
+        }).exec(); 
+        return songs;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
 const createUniqueId = (title, artist) => {
     const id = new mongoose.Types.ObjectId().toString();
     return `${id}-${artist}-${title}`;
@@ -36,4 +53,4 @@ const getSongFromDb = async (songId) => {
 
 
 
-module.exports = { createUniqueId, createSongInDb, getSongFromDb }
+module.exports = { getSongsFromDb, createUniqueId, createSongInDb, getSongFromDb }
