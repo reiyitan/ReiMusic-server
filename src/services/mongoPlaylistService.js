@@ -47,7 +47,9 @@ const renamePlaylistInDb = async (uid, playlistId, newName) => {
 }
 
 const addToPlaylistInDb = async (playlistId, songId) => {
-
+    const playlist = await Playlist.findById(mongoose.Types.ObjectId.createFromHexString(playlistId)).exec(); 
+    playlist.songs.push(songId); 
+    await playlist.save(); 
 }
 
 const removeFromPlaylistInDb = async (playlistId, songId) => {
