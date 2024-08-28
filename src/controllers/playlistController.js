@@ -3,6 +3,7 @@ const {
     deletePlaylistInDb, 
     renamePlaylistInDb,
     addToPlaylistInDb, 
+    playlistContainsSong,
     removeFromPlaylistInDb, 
     getPlaylistsFromDb,
     getPlaylistFromDb,
@@ -63,6 +64,9 @@ const addToPlaylist = async (req, res) => {
     const { playlistId } = req.params; 
     const { songId } = req.body; 
     try {
+        if (await playlistContainsSong(playlistId, songId)) {
+            return res.status(403).json({error: "Song already in playlist"});
+        }
         addToPlaylistInDb(playlistId, songId); 
         return res.status(204).end();
     }

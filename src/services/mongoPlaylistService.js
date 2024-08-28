@@ -52,6 +52,14 @@ const addToPlaylistInDb = async (playlistId, songId) => {
     await playlist.save(); 
 }
 
+const playlistContainsSong = async (playlistId, songId) => {
+    const playlist = await Playlist.findOne({
+        _id: mongoose.Types.ObjectId.createFromHexString(playlistId),
+        songs: mongoose.Types.ObjectId.createFromHexString(songId)
+    }).exec();
+    return !!playlist;
+}
+
 const removeFromPlaylistInDb = async (playlistId, songId) => {
 
 }
@@ -71,4 +79,4 @@ const getPlaylistFromDb = async (playlistId) => {
     }
 }
 
-module.exports = { createPlaylistInDb, deletePlaylistInDb, renamePlaylistInDb, addToPlaylistInDb, removeFromPlaylistInDb, getPlaylistsFromDb, getPlaylistFromDb }
+module.exports = { createPlaylistInDb, deletePlaylistInDb, renamePlaylistInDb, addToPlaylistInDb, playlistContainsSong, removeFromPlaylistInDb, getPlaylistsFromDb, getPlaylistFromDb }
