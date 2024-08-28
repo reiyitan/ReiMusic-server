@@ -61,7 +61,10 @@ const playlistContainsSong = async (playlistId, songId) => {
 }
 
 const removeFromPlaylistInDb = async (playlistId, songId) => {
-
+    await Playlist.updateOne(
+        {_id: mongoose.Types.ObjectId.createFromHexString(playlistId)},
+        {$pull: {songs: mongoose.Types.ObjectId.createFromHexString(songId)}}
+    ).exec();
 }
 
 const getPlaylistsFromDb = async (uid) => {

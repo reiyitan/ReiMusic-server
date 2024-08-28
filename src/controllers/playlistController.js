@@ -77,11 +77,20 @@ const addToPlaylist = async (req, res) => {
 }
 
 /**
- * path params: userId, playlistId
+ * path params: playlistId
  * body: songId
  */
 const removeFromPlaylist = async (req, res) => {
-
+    const { playlistId } = req.params; 
+    const { songId } = req.body; 
+    try {
+        await removeFromPlaylistInDb(playlistId, songId); 
+        return res.status(204).end();
+    }
+    catch (error) {
+        console.error(error); 
+        return res.status(500).json({error: "Error removing song from playlist"});
+    }
 }
 
 /**
