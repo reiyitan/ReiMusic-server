@@ -1,4 +1,15 @@
-const { getSongsFromDb, uploadFileToS3, createUniqueId, createSongInDb, addSongToUser, getLinkFromS3 } = require("../services");
+const { 
+    getSongsFromDb, 
+    getUserSongsFromDb, 
+    uploadFileToS3, 
+    createUniqueId, 
+    createSongInDb, 
+    deleteSongInDb,
+    removeFromAllPlaylistsInDb, 
+    addSongToUser, 
+    getLinkFromS3, 
+    deleteSongInS3 
+} = require("../services");
 
 const getSongs = async (req, res) => {
     try {
@@ -9,6 +20,20 @@ const getSongs = async (req, res) => {
     catch (error) {
         console.error(error); 
         return res.status(500).json({error: "Error retrieving songs"});
+    }
+}
+
+/**
+ * req.params: userId
+ */
+const getUserSongs = async (req, res) => {
+    const { userId } = req.params; 
+    try {
+        const songs = await getUserSongsFromDb(userId); 
+        return res.status(200).json({songs: songs});
+    }
+    catch (error) {
+        return res.status(500).json({error: "Error retrieving songs"}); 
     }
 }
 
@@ -35,6 +60,25 @@ const uploadSong = async (req, res) => {
 }
 
 /**
+ * path params: userId, songId
+ * body: s3_key
+ */
+const deleteSong = async (req, res) => {
+    try {
+        const { songId } = req.params;
+        const { s3_key } = req.body;
+        await deleteSongInDb(songId);
+        await removeFromAllPlaylistsInDb(songId);
+        await deleteSongInS3(s3_key);
+        return res.status(204).end();
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({error: "Error deleting song"});
+    }
+}
+
+/**
  * req.params: s3_key
  */
 const getSongLink = async (req, res) => {
@@ -49,4 +93,4 @@ const getSongLink = async (req, res) => {
     }
 }
 
-module.exports = { getSongs, uploadSong, getSongLink }
+module.exports = { getSongs, getUserSongs, uploadSong, deleteSong, getSongLink }

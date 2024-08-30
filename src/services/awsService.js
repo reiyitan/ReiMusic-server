@@ -1,5 +1,5 @@
 const { s3Client } = require("../config");
-const { PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const uploadFileToS3 = async (s3_key, file) => {
@@ -29,4 +29,12 @@ const getLinkFromS3 = async (s3_key) => {
     }
 }
 
-module.exports = { uploadFileToS3, getLinkFromS3 }
+const deleteSongInS3 = async (s3_key) => {
+    const command = new DeleteObjectCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: s3_key
+    });
+    await s3Client.send(command);
+}
+
+module.exports = { uploadFileToS3, getLinkFromS3, deleteSongInS3 }

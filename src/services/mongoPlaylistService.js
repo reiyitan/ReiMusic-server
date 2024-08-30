@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { Playlist } = require("../models");
 const { getUserFromDb, deleteUserPlaylist, renameUserPlaylist } = require("./mongoUserService");
-const { getSongFromDb } = require("./mongoSongService");
 
 const createPlaylistInDb = async (uid) => {
     try {
@@ -67,6 +66,13 @@ const removeFromPlaylistInDb = async (playlistId, songId) => {
     ).exec();
 }
 
+const removeFromAllPlaylistsInDb = async (songId) => {
+    await Playlist.updateMany(
+        {songs: mongoose.Types.ObjectId.createFromHexString(songId)},
+        {$pull: {songs: mongoose.Types.ObjectId.createFromHexString(songId)}}
+    ).exec();
+}
+
 const getPlaylistsFromDb = async (uid) => {
     const user = await getUserFromDb(uid); 
     return user.playlists; 
@@ -82,4 +88,14 @@ const getPlaylistFromDb = async (playlistId) => {
     }
 }
 
-module.exports = { createPlaylistInDb, deletePlaylistInDb, renamePlaylistInDb, addToPlaylistInDb, playlistContainsSong, removeFromPlaylistInDb, getPlaylistsFromDb, getPlaylistFromDb }
+module.exports = { 
+    createPlaylistInDb, 
+    deletePlaylistInDb, 
+    renamePlaylistInDb, 
+    addToPlaylistInDb, 
+    playlistContainsSong, 
+    removeFromPlaylistInDb, 
+    removeFromAllPlaylistsInDb, 
+    getPlaylistsFromDb, 
+    getPlaylistFromDb 
+}
