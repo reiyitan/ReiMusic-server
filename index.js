@@ -5,7 +5,9 @@ const port = 3000;
 
 const cors = require("cors");
 const corsOptions = {
-    origin: "https://reiuh.cc"
+    origin: "https://reiuh.cc",
+    methods: ["POST", "DELETE", "PATCH", "GET"],
+    credentials: true
 };
 app.use(cors(corsOptions));
 app.use(express.json());
