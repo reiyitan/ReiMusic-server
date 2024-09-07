@@ -27,7 +27,7 @@ const getUserSongsFromDb = async (userId) => {
 
 const createUniqueId = (title, artist) => {
     const id = new mongoose.Types.ObjectId().toString();
-    return `${id}-${artist}-${title}`;
+    return `${id}-${artist}-${title}`.replaceAll("/", "_");
 }
 
 const createSongInDb = async (title, artist, duration, uid, username, s3_key) => {
